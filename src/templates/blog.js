@@ -15,8 +15,8 @@ export default function BlogTemplate({data}) {
 
 
 export const query = graphql `
-  query BlogPosts($path: String!) {
-    markdownRemark(frontmatter: {path: {eq: $path}}) {
+  query BlogPosts($id: String!) {
+    markdownRemark(id: {eq: $id}) {
       html
       frontmatter {
         date

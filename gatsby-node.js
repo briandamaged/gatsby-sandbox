@@ -14,12 +14,11 @@ exports.createPages = async function({boundActionCreators, graphql}) {
 
   const result = await graphql(`
     {
-      allMarkdownRemark(
-        sort: {order: DESC, fields: [frontmatter___date]}
-        limit: 1000
-      ) {
+      allMarkdownRemark {
         edges {
           node {
+            id
+            fileAbsolutePath
             frontmatter {
               path
             }
@@ -35,10 +34,14 @@ exports.createPages = async function({boundActionCreators, graphql}) {
   }
 
   result.data.allMarkdownRemark.edges.forEach(function({node}) {
+    const p = node.frontmatter.path || path.relative(__dirname, node.fileAbsolutePath);
+
     createPage({
-      path: node.frontmatter.path,
+      path: p,
       component: blogPostTemplate,
-      context: {},
+      context: {
+        id: node.id
+      },
     });
   });
 };
